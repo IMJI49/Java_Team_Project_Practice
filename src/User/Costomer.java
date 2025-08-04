@@ -1,7 +1,32 @@
 package User;
 
-public class Costomer {
-
+public abstract class Costomer {
+	protected String ID;
+	protected String name;
+	protected String adress;
+	protected String password;
+	public abstract String getRole();
+	public abstract void createNewAccount();
+	public Costomer(String iD, String name, String adress, String password) {
+		super();
+		ID = iD;
+		this.name = name;
+		this.adress = adress;
+		this.password = password;
+	}
+	public String getID() {
+		return ID;
+	}
+	public String getName() {
+		return name;
+	}
+	public String getAdress() {
+		return adress;
+	}
+	public String getPassword() {
+		return password;
+	}
+	
 }
 
 	
