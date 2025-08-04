@@ -26,6 +26,11 @@ public abstract class User {
 	public String getPassword() {
 		return password;
 	}
+	@Override
+	public String toString() {
+		return String.format("이름 : %s, 아이디 주소 : %s, 비밀번호 : %s", name,adress,"*".repeat(password.length()));
+			
+	}
 	
 }
 
