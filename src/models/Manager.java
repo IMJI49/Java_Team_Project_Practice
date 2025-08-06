@@ -1,8 +1,8 @@
 package models;
 
-public class Customer extends Person {
+public class Manager extends Person {
 
-	public Customer(String iD, String name, String adress, String password) {
+	public Manager(String iD, String name, String adress, String password) {
 		super(iD, name, adress, password);
 
 	}

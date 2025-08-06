@@ -1,13 +1,12 @@
 package models;
 
-public abstract class User {
+public abstract class Person {
 	protected String ID;
 	protected String name;
 	protected String adress;
 	protected String password;
 	public abstract String getRole();
-	public abstract void createNewAccount();
-	public User(String iD, String name, String adress, String password) {
+	public Person(String iD, String name, String adress, String password) {
 		super();
 		ID = iD;
 		this.name = name;
