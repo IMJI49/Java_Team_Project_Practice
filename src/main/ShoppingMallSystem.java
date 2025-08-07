@@ -1,6 +1,6 @@
 package main;
 
-public class MegaCoffeeMain {
+public class ShoppingMallSystem {
 
 	public static void main(String[] args) {
 
