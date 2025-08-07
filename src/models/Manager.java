@@ -2,14 +2,16 @@ package models;
 
 public class Manager extends Person {
 
-	public Manager(String iD, String name, String adress, String password) {
-		super(iD, name, adress, password);
+	
 
+	public Manager(String name, String adress, String email, String id, String password,
+			String phoneNumber) {
+		super(name, adress, email, id, password, phoneNumber);
 	}
 
 	@Override
 	public String getRole() {
-		return null;
+		return "관리자";
 
 	}
 

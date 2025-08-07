@@ -1,37 +1,55 @@
 package models;
 
 public class Item {
-	
+
 	private String itemID;
 	private String name;
+	private String category;
 	private int price;
 	private int quantity;
-	public Item(String itemID, String name, int price, int quantity) {
-		super();
-		this.itemID = itemID;
-		this.name = name;
-		this.price = price;
-		this.quantity = quantity;
-	}
+	private String prodDesc;
+	private static int idNum = 1;
+
+//	"P"+String.format("%4d", idNum);
+
 	public String getItemID() {
 		return itemID;
 	}
+
+	public Item(String name, String category, int price, int quantity, String prodDesc) {
+		itemID = "P" + String.format("%4d", idNum);
+		this.name = name;
+		this.category = category;
+		this.price = price;
+		this.quantity = quantity;
+		this.prodDesc = prodDesc;
+		idNum++;
+	}
+
 	public String getName() {
 		return name;
 	}
+
 	public int getPrice() {
 		return price;
 	}
+
 	public int getQuantity() {
 		return quantity;
 	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public String getProdDesc() {
+		return prodDesc;
+	}
+
 	@Override
 	public String toString() {
 		return super.toString();
-			
+
 	}
-	
 
 }
-
-	
