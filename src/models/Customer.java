@@ -16,7 +16,7 @@ public class Customer extends Person {
 
 	@Override
 	public String getRole() {
-		return "이용자";
+		return "이용자임";
 
 	}
 
