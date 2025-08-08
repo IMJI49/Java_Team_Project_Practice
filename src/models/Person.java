@@ -1,7 +1,12 @@
 package models;
 
-public abstract class Person {
-	protected String serialNum;
+import java.io.Serializable;
+
+public abstract class Person implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected String name;
 	protected String adress;
 	protected String email;
@@ -10,18 +15,15 @@ public abstract class Person {
 	protected String phoneNumber;
 	public abstract String getRole();
 	
-	public Person(String name, String adress, String email, String id, String password,
+	public Person(String id, String name,  String password, String adress, String email, 
 			String phoneNumber) {
+		this.id = id;
 		this.name = name;
+		this.password = password;
 		this.adress = adress;
 		this.email = email;
-		this.id = id;
-		this.password = password;
 		this.phoneNumber = phoneNumber;
-	}
-
-	public String getSerialNum() {
-		return serialNum;
+		getRole();
 	}
 
 	public String getEmail() {
