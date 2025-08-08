@@ -7,9 +7,9 @@ public class Manager extends Person {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Manager(String name, String adress, String email, String id, String password,
-			String phoneNumber) {
-		super(name, adress, email, id, password, phoneNumber);
+	public Manager(String id, String password, String name, String adress, String email, String phoneNumber) {
+		super(id, password, name, adress, email, phoneNumber);
+		
 	}
 
 	@Override

@@ -13,7 +13,7 @@ public class Item implements Serializable {
 	private String category;
 	private int price;
 	private int quantity;
-	private String prodDesc;
+	private String description;
 	private static int idNum = 1;
 
 //	"P"+String.format("%4d", idNum);
@@ -22,13 +22,13 @@ public class Item implements Serializable {
 		return itemID;
 	}
 
-	public Item(String name, String category, int price, int quantity, String prodDesc) {
+	public Item(String name, String category, int price, int quantity, String description) {
 		itemID = "P" + String.format("%4d", idNum);
 		this.name = name;
 		this.category = category;
 		this.price = price;
 		this.quantity = quantity;
-		this.prodDesc = prodDesc;
+		this.description = description;
 		idNum++;
 	}
 
@@ -48,8 +48,8 @@ public class Item implements Serializable {
 		return category;
 	}
 
-	public String getProdDesc() {
-		return prodDesc;
+	public String getDescription() {
+		return description;
 	}
 
 	@Override

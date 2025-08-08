@@ -4,15 +4,15 @@ public class Customer extends Person {
 
 	
 
+	public Customer(String id, String password, String name, String adress, String email, String phoneNumber) {
+		super(id, password, name, adress, email, phoneNumber);
+		
+	}
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
-	public Customer(String name, String adress, String email, String id, String password,
-			String phoneNumber) {
-		super(name, adress, email, id, password, phoneNumber);
-	}
 
 	@Override
 	public String getRole() {
