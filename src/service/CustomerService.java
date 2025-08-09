@@ -2,7 +2,6 @@ package service;
 
 import java.util.Scanner;
 
-import controller.$missing$;
 import models.Customer;
 import repository.CustomerRepository;
 
@@ -17,15 +16,14 @@ public class CustomerService {
 	}
 	
 	//회원가입
-	public Customer registerCustomer() {
+	public Customer registerCustomer(String name, String address, String email,
+			String id, String password, String phoneNumber) {
 		//이름 검증
-		String name = scanner.nextLine();
 		if(name.trim().length() < 2 || name.trim().length() > 20) {
 			throw new RuntimeException("이름은 2자 이상, 20자 이하여야 합니다.");
 		}
 		
 		//아이디 검증
-		String id = scanner.nextLine();
 		if(customerRepository.existsById(id)) {
 			throw new RuntimeException("이미 존재하는 ID입니다: " + id);
 		}
@@ -33,11 +31,21 @@ public class CustomerService {
 		requireNonEmpty(id, "ID를 입력해 주세요.");
 		
 		if(id.trim().length() < 5 || id.trim().length() > 20) {
-			
+			throw new RuntimeException("아이디는 5자 이상, 20자 이하여야 합니다.");
+		}
+		
+		//비밀번호 검증
+		if(password.trim().length() < 8 || password.trim().length() > 20) {
+			throw new RuntimeException("패스워드는 8자 이상, 20자 이하여야 합니다.");
 		}
 		
 		Customer customer = new Customer(name, address, email,
 				id, password, phoneNumber);
+		
+		//Repository 호출
+		Customer savedCustomer = customerRepository.save(customer);
+		
+		System.out.println("새사용자 등록: " + savedCustomer.getId());
 		
 		return customer;
 	}
