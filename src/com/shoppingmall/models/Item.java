@@ -1,4 +1,4 @@
-package models;
+package com.shoppingmall.models;
 
 import java.io.Serializable;
 
@@ -22,8 +22,12 @@ public class Item implements Serializable {
 		return itemID;
 	}
 
+	public Item(String description) {
+		this.description = description;
+	}
+
 	public Item(String name, String category, int price, int quantity, String description) {
-		itemID = "P" + String.format("%4d", idNum);
+		itemID = "P" + String.format("%40d", idNum);
 		this.name = name;
 		this.category = category;
 		this.price = price;
@@ -52,10 +56,19 @@ public class Item implements Serializable {
 		return description;
 	}
 
+	public boolean productStock(int quantity) {
+		this.quantity += quantity;
+		return true;
+	}
+
+	public int discount(double offRate) {
+		this.price *= offRate;
+		return this.price;
+	}
+
 	@Override
 	public String toString() {
-		return super.toString();
-
+		return String.format("%s", name);
 	}
 
 }

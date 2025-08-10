@@ -1,4 +1,4 @@
-package models;
+package com.shoppingmall.models;
 
 public class Manager extends Person {
 
@@ -9,7 +9,7 @@ public class Manager extends Person {
 
 	public Manager(String id, String password, String name, String adress, String email, String phoneNumber) {
 		super(id, password, name, adress, email, phoneNumber);
-		
+		getRole();
 	}
 
 	@Override

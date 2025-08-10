@@ -1,4 +1,4 @@
-package exception;
+package com.shoppingmall.exception;
 
 @SuppressWarnings("serial")
 public class ValidationException extends ShoppingMallException {
