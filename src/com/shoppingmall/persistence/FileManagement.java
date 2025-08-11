@@ -1,4 +1,4 @@
-package persistence;
+package com.shoppingmall.persistence;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,12 +30,14 @@ public class FileManagement {
 		//파일이 비어있는 경우
 		if(file.length() == 0) {
 			System.err.println("파일이 비어있습니다: " + fullPath);
+			System.out.println("빈 리스트를 반환합니다.");
 			return new ArrayList<>();
 		}
 		
 		// 파일 읽기
 		try (ObjectInputStream ois = new ObjectInputStream(
 									 	new FileInputStream(file))){
+			@SuppressWarnings("unchecked")
 			List<T> data = (List<T>) ois.readObject();
 			System.out.println("파일 읽기 성공: " + fullPath + " (" + data.size()+ "개 항목)");
 			return data;

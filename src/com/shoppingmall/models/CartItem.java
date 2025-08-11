@@ -1,9 +1,8 @@
-package models;
+package com.shoppingmall.models;
 
 public class CartItem {
 	private Item item;		//상품
 	private int quantity;	//수량
-	
 	
 	public CartItem(Item item, int quantity) {
 		//super();

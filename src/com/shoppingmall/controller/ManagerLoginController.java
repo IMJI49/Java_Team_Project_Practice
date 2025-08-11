@@ -1,9 +1,9 @@
-package controller;
+package com.shoppingmall.controller;
 
 import java.util.Scanner;
 
-import models.Manager;
-import repository.ManagerRepository;
+import com.shoppingmall.models.Manager;
+import com.shoppingmall.repository.ManagerRepository;
 
 public class ManagerLoginController {
 	private ManagerRepository managerRepository;
@@ -33,13 +33,18 @@ public ManagerLoginController() {
         
         if(manager != null) {
         	this.manager = manager;
-    		System.out.println("\n ✅ 로그인 성공! 관리자 " + manager.getId() + "님 환영합니다!");
+        	this.isLoggedIn = true;
     		
-    		this.isLoggedIn = true;
+        	System.out.println("\n ✅ 로그인 성공! 관리자 " + manager.getId() + "님 환영합니다!");
+    		
     		return true;
     		
         } else {
         	System.out.println("\n ✖️ 로그인 실패 : ID 또는 비밀번호가 올바르지 않습니다.");
+
+        	this.manager = null;
+        	this.isLoggedIn = false;
+        	
         	return false;
         }
  	}
@@ -48,8 +53,10 @@ public ManagerLoginController() {
 	public void logout() {
 		if (isLoggedIn()) {
 			System.out.println("관리자 " + manager.getName() + "님이 로그아웃되었습니다.");
+			
 			this.manager = null;
 			this.isLoggedIn = false;
+			
 		} else {
 			System.out.println("로그인되어 있지 않습니다.");
 			
@@ -57,7 +64,7 @@ public ManagerLoginController() {
 	}
 
 	public boolean isLoggedIn() {
-		return manager !=null ;
+		return this.isLoggedIn && this.manager != null; 
 	}
 
 	

@@ -1,4 +1,4 @@
-package util;
+package com.shoppingmall.util;
 
 public class Constants {
 

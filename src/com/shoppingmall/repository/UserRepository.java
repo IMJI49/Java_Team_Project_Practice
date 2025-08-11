@@ -1,10 +1,10 @@
-package repository;
+package com.shoppingmall.repository;
 
 import java.util.List;
 
-import models.Customer;
-import persistence.FileManagement;
-import util.Constants;
+import com.shoppingmall.models.Customer;
+import com.shoppingmall.persistence.FileManagement;
+import com.shoppingmall.util.Constants;
 
 
 public class UserRepository {
@@ -45,8 +45,8 @@ public class UserRepository {
 				.orElse(null);
 	}
 
-	// 모든 사용자 데이터 반환
-	public List<Customer> getAllCustomers() {
+	// 모든 사용자 데이터 반환 (비밀번호 제외)
+	public List<Customer> getAllCustomersWithoutPassword() {
 	    return FileManagement.readFromFile(FILE_NAME);
 	}
 	

@@ -1,8 +1,8 @@
-package test;
+package com.shoppingmall.test;
 
-import controller.ManagerLoginController;
-import models.Manager;
-import repository.ManagerRepository;
+import com.shoppingmall.controller.ManagerLoginController;
+import com.shoppingmall.models.Manager;
+import com.shoppingmall.repository.ManagerRepository;
 
 public class ManagerLoginTest {
 	
@@ -28,12 +28,12 @@ public class ManagerLoginTest {
         ManagerLoginController controller = new ManagerLoginController();
         
         // 로그인 전 상태 출력
-        System.out.println("로그인 전의 로그인 상태: " + controller.isLoggedIn());
+        System.out.println("- 로그인 전의 로그인 상태: " + controller.isLoggedIn());
         
         // requireLogin 테스트 (로그인하지 않은 상태)
-        System.out.println("\n로그인 필요 기능 테스트 (로그인 전): " + controller.requireLogin());
+        System.out.println("\n- 로그인 필요 기능 테스트 (로그인 전): " + controller.requireLogin());
         
-        System.out.println("\n관리자 로그인 테스트 완료\n");
+        System.out.println("\n✅ 관리자 로그인 테스트 완료\n");
 	}
 
 	// 인증 테스트
@@ -61,7 +61,7 @@ public class ManagerLoginTest {
         repository.initialize();
         
         Manager testManager2 = repository.authenticate("manager1", "manager1234");
-        if (testManager != null) {
+        if (testManager2 != null) {
             System.out.println("✅ 기본 관리자 계정 확인(초기화 후): 성공");
             System.out.println("   - 관리자 이름: " + testManager.getName());
             System.out.println("   - 관리자 ID: " + testManager.getId());
@@ -74,20 +74,20 @@ public class ManagerLoginTest {
         
         // 틀린 비밀번호 테스트
         Manager invalidManager = repository.authenticate("manager1", "wrongpassword");
-        System.out.println("틀린 비밀번호 테스트: " + (invalidManager == null ? "✅ 정상 거부" : "❌ 보안 오류"));
+        System.out.println("- 틀린 비밀번호 테스트: " + (invalidManager == null ? "✅ 정상 거부" : "❌ 보안 오류"));
         
         System.out.println();
         
         // 존재하지 않는 ID 테스트
         Manager nonexistentManager = repository.authenticate("nonexistent", "password");
-        System.out.println("존재하지 않는 ID 테스트: " + (nonexistentManager == null ? "✅ 정상 거부" : "❌ 보안 오류"));
+        System.out.println("- 존재하지 않는 ID 테스트: " + (nonexistentManager == null ? "✅ 정상 거부" : "❌ 보안 오류"));
         
         System.out.println();
         
         // 저장된 관리자 수 확인
-        System.out.println("저장된 관리자 수: " + repository.getAllManagers().size());
+        System.out.println("- 저장된 관리자 수: " + repository.getAllManagers().size());
         
-        System.out.println("인증 시스템 테스트 완료\n");
+        System.out.println("✅ 인증 시스템 테스트 완료\n");
     }
    
 	
@@ -99,13 +99,13 @@ public class ManagerLoginTest {
         ManagerLoginController controller = new ManagerLoginController();
         
         // 초기 상태
-        System.out.println("초기 로그인 상태: " + controller.isLoggedIn());
+        System.out.println("- 초기 로그인 상태: " + controller.isLoggedIn());
         
         // 로그아웃 시도 (로그인하지 않은 상태)
-        System.out.println("로그인하지 않은 상태에서 로그아웃 시도:");
+        System.out.println("- 로그인하지 않은 상태에서 로그아웃 시도:");
         controller.logout();
         
-        System.out.println("테스트 완료\n");
+        System.out.println("- ✅ 테스트 완료\n");
     }	
 	
 	

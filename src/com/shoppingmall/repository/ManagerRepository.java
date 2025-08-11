@@ -1,21 +1,18 @@
-package repository;
+package com.shoppingmall.repository;
 
 import java.util.List;
 
-import models.Manager;
-import persistence.FileManagement;
-import util.Constants;
+import com.shoppingmall.models.Manager;
+import com.shoppingmall.persistence.FileManagement;
+import com.shoppingmall.util.Constants;
 
 public class ManagerRepository {
-    private FileManagement fileManager;
  
 	// 파일명 상수
     private static final String FILE_NAME = Constants.MANAGER_DATA_FILE;
   
     public ManagerRepository() {
 	
-    	this.fileManager = new FileManagement();
-    	
     	initialize();
     
     }

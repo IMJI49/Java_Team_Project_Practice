@@ -1,12 +1,10 @@
-package models;
+package com.shoppingmall.models;
 
 import java.io.Serializable;
 
 public class Item implements Serializable {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private String itemID;
 	private String name;
@@ -23,7 +21,7 @@ public class Item implements Serializable {
 	}
 
 	public Item(String name, String category, int price, int quantity, String prodDesc) {
-		itemID = "P" + String.format("%4d", idNum);
+		itemID = "P" + String.format("%40d", idNum);
 		this.name = name;
 		this.category = category;
 		this.price = price;
