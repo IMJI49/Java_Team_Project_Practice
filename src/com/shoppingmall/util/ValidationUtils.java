@@ -39,7 +39,7 @@ public class ValidationUtils {
 		if (obj.getClass() == Item.class &&obj== null) {
 			throw new ProductNotFoundException(message);
 		}
-		if (obj.getClass() == Customer.class &&obj== null) {
+		else if (obj.getClass() == Customer.class &&obj== null) {
 			throw new CustomerNotFoundException(message);
 		}
 	}

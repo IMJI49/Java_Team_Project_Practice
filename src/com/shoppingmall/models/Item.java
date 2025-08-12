@@ -62,7 +62,7 @@ public class Item implements Serializable {
 	}
 
 	public int discount(double offRate) {
-		this.price *= offRate;
+		this.price *= (1-offRate);
 		return this.price;
 	}
 
