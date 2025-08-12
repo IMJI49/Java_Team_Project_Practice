@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class MainController {
 	private Scanner scanner;
-	private boolean isManager = false;
+	private boolean isManager = true;	//임시 관리자모드
 	
 	public MainController() {
 		this.scanner = new Scanner(System.in);
@@ -56,7 +56,7 @@ public class MainController {
 			System.out.println("║      [관리자 모드] 환영합니다!                   ║");
 			System.out.println("╚════════════════════════════════════════════╝");
 			System.out.println("1. 주문내역 확인");
-			System.out.println("2. 상품 취소 관리)");
+			System.out.println("2. 상품 취소 관리");
 			System.out.println("3. 마이페이지");
 			System.out.println("4. [관리] 상품 관리");
 			System.out.println("5. [관리] 사용자 관리");
@@ -73,10 +73,80 @@ public class MainController {
 					managerMyPage();
 					break;
 				case "4":
+					manageGood();
+					break;
+				case "5":
+					manageUser();
+					break;
+				case "6":
+					return;
+				default:
+					System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+					break;
+			}
+		}
+	}
+
+	private void manageUser() {
+		while(true) {
+			System.out.println("┌────────────────────────────────────┐");
+			System.out.println("│      👥 [관리자] 사용자 관리            │");
+			System.out.println("├────────────────────────────────────┤");
+			System.out.println("│  1. 전체 회원 조회                     │");
+			System.out.println("│  2. 회원 검색                        │");
+			System.out.println("│  3. 회원 상세 정보                    │");
+			System.out.println("│  4. 회원 강제 탈퇴                    │");
+			System.out.println("│  0. 돌아가기                         │");
+			System.out.println("└────────────────────────────────────┘");
+			System.out.print("메뉴를 선택하세요: _");
+			
+			String menu = scanner.nextLine();
+			switch(menu) {
+				case "1":
+					break;
+				case "2":
+					break;
+				case "3":
+					break;
+				case "4":
+					break;
+				case "0":
+					return;
+				default:
+					System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+					break;
+			}
+		}
+	}
+
+	//관리자 상품 관리
+	private void manageGood() {
+		while(true) {
+			System.out.println("┌────────────────────────────────────┐");
+			System.out.println("│      📦 [관리자] 상품 관리             │");
+			System.out.println("├────────────────────────────────────┤");
+			System.out.println("│  1. 상품 등록                        │");
+			System.out.println("│  2. 상품 수정                        │");
+			System.out.println("│  3. 상품 삭제                        │");
+			System.out.println("│  4. 재고 관리                        │");
+			System.out.println("│  5. 상품 목록 조회                    │");
+			System.out.println("│  0. 돌아가기                         │");
+			System.out.println("└────────────────────────────────────┘");
+			System.out.print("메뉴를 선택하세요: _");
+			
+			String menu = scanner.nextLine();
+			switch(menu) {
+				case "1":
+					break;
+				case "2":
+					break;
+				case "3":
+					break;
+				case "4":
 					break;
 				case "5":
 					break;
-				case "6":
+				case "0":
 					return;
 				default:
 					System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
@@ -162,7 +232,7 @@ public class MainController {
 			System.out.println("│  3. 수량 변경                        │");
 			System.out.println("│  4. 상품 삭제                        │");
 			System.out.println("│  5. 장바구니 비우기                    │");
-			System.out.println("│  6. 돌아가기                         │");
+			System.out.println("│  0. 돌아가기                         │");
 			System.out.println("└────────────────────────────────────┘");
 			System.out.print("메뉴를 선택하세요: _");
 			
