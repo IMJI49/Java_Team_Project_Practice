@@ -8,7 +8,7 @@ public class CustomerLoginTest {
 	
 	public static void main(String[] args) {
 		System.out.println("=== 고객 로그인 시스템 테스트 시작 ===\n\n");
-        		
+         		
         // 테스트
         testCustomerLogin();
         testAuthentication();

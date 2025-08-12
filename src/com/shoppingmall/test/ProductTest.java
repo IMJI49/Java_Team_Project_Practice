@@ -74,7 +74,7 @@ public class ProductTest {
         System.out.println("\n 테스트 : 이름으로 검색 (존재하는 상품)");
         System.out.println("'노트북'으로 검색합니다.");
         System.out.println("=".repeat(20));
-        
+         
         repository.findBy("노트북");
         
         System.out.println("== ✅ 검색 메서드 실행 완료! ==");

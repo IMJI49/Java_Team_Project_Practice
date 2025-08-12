@@ -5,7 +5,7 @@ import java.util.List;
 import com.shoppingmall.models.Manager;
 import com.shoppingmall.persistence.FileManagement;
 import com.shoppingmall.util.Constants;
-
+ 
 public class ManagerRepository {
  
 	

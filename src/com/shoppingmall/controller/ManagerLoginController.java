@@ -1,7 +1,7 @@
 package com.shoppingmall.controller;
 
 import java.util.Scanner;
-
+ 
 import com.shoppingmall.models.Manager;
 import com.shoppingmall.repository.ManagerRepository;
 

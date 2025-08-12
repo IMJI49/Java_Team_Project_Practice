@@ -167,7 +167,7 @@ public class UserRepository {
         if (!verifyPassword(id, currentPassword)) {
             return false; // 현재 비밀번호 불일치
         }
-
+ 
         List<Customer> customers = FileManagement.readFromFile(FILE_NAME);
         
         for (Customer customer : customers) {

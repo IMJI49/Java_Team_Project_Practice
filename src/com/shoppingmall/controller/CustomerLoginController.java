@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import com.shoppingmall.models.Customer;
 import com.shoppingmall.repository.UserRepository;
-
+ 
 public class CustomerLoginController {
 	private Scanner scanner;
 	private Customer customer;

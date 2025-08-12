@@ -88,7 +88,7 @@ public class ManagerLoginTest {
         System.out.println("- 존재하지 않는 ID 테스트: " + (nonexistentManager == null ? "✅ 정상 거부" : "❌ 보안 오류"));
         
         System.out.println();
-        
+         
 //        // 저장된 관리자 수 확인
 //        System.out.println("- 저장된 관리자 수: " + repository.getAllManagers().size());
 //        
