@@ -8,6 +8,7 @@ import com.shoppingmall.util.Constants;
 
 public class ManagerRepository {
  
+	
 	// 파일명 상수
     private static final String FILE_NAME = Constants.MANAGER_DATA_FILE;
   
@@ -24,14 +25,14 @@ public class ManagerRepository {
 		//기본 관리자가 없으면 생성
 		if(managers.isEmpty()) {
 			
-		Manager defaultManager = new Manager(
-				"매니저1",
-				"서울시 마포구 마포동",
-				"manager1@gmail.com",
-				"manager1",
-				"manager1234",
-				"010-1234-5647"
-			);
+			Manager defaultManager = new Manager(
+					"매니저1",
+					"서울시 마포구 마포동",
+					"manager1@gmail.com",
+					"manager1",
+					"manager1234",
+					"010-1234-5647"
+					);
 		managers.add(defaultManager);
 		FileManagement.writeToFile(FILE_NAME, managers);
 		System.out.println("기본 관리자 계정이 생성되었습니다.");
@@ -67,27 +68,27 @@ public class ManagerRepository {
 		}
 
 		
-		// 사용자 존재 여부 확인
-		public boolean existsById(String id) {
-			
-			return findById(id) != null;
-		}
+//		// 사용자 존재 여부 확인
+//		public boolean existsById(String id) {
+//			
+//			return findById(id) != null;
+//		}
 
 		
-		//ID로 관리자 조회
-		public Object findById(String id) {
-			List<Manager> managers = FileManagement.readFromFile(FILE_NAME);
-			
-			return managers.stream()
-					.filter(u -> u.getId().equals(id))
-					.findFirst()
-					.orElse(null);
-		}
+//		// ID로 관리자 조회
+//		public Object findById(String id) {
+//			List<Manager> managers = FileManagement.readFromFile(FILE_NAME);
+//			
+//			return managers.stream()
+//					.filter(u -> u.getId().equals(id))
+//					.findFirst()
+//					.orElse(null);
+//		}
 
-		// 모든 관리자 데이터 반환
-		public List<Manager> getAllManagers() {
-			return FileManagement.readFromFile(FILE_NAME);
-		}
+//		// 모든 관리자 데이터 반환
+//		public List<Manager> getAllManagers() {
+//			return FileManagement.readFromFile(FILE_NAME);
+//		}
 	
 	
 }

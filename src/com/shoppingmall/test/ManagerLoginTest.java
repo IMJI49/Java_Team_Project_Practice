@@ -28,10 +28,13 @@ public class ManagerLoginTest {
         ManagerLoginController controller = new ManagerLoginController();
         
         // 로그인 전 상태 출력
-        System.out.println("- 로그인 전의 로그인 상태: " + controller.isLoggedIn());
+        System.out.println("\n- 로그인 전의 로그인 상태: " + controller.isLoggedIn());
         
         // requireLogin 테스트 (로그인하지 않은 상태)
-        System.out.println("\n- 로그인 필요 기능 테스트 (로그인 전): " + controller.requireLogin());
+        System.out.println("\n- 로그인 필요 기능 테스트 (로그인 전):");
+
+        boolean requireLogin = controller.requireLogin();
+        System.out.println(requireLogin);
         
         System.out.println("\n✅ 관리자 로그인 테스트 완료\n");
 	}
@@ -39,7 +42,9 @@ public class ManagerLoginTest {
 	// 인증 테스트
 	private static void testAuthentication() {
 		
+		System.out.println("==========================================");
         System.out.println("2. 인증 테스트");
+		System.out.println("==========================================");
         
         ManagerRepository repository = new ManagerRepository();
         
@@ -48,7 +53,7 @@ public class ManagerLoginTest {
         // 기본 관리자 계정 확인
         Manager testManager = repository.authenticate("manager1", "manager1234");
         if (testManager != null) {
-            System.out.println("✅ 기본 관리자 계정 확인(초기화 전): 성공");
+            System.out.println("✅ 기본 관리자 계정 확인(초기화 전): 성공 (강제 초기화를 하지 않아도 초기화가 작동됐음)");
             System.out.println("   - 관리자 이름: " + testManager.getName());
             System.out.println("   - 관리자 ID: " + testManager.getId());
         } else {
@@ -62,7 +67,7 @@ public class ManagerLoginTest {
         
         Manager testManager2 = repository.authenticate("manager1", "manager1234");
         if (testManager2 != null) {
-            System.out.println("✅ 기본 관리자 계정 확인(초기화 후): 성공");
+            System.out.println("✅ 기본 관리자 계정 확인(강제 초기화 후): 성공");
             System.out.println("   - 관리자 이름: " + testManager.getName());
             System.out.println("   - 관리자 ID: " + testManager.getId());
         } else {
@@ -84,9 +89,9 @@ public class ManagerLoginTest {
         
         System.out.println();
         
-        // 저장된 관리자 수 확인
-        System.out.println("- 저장된 관리자 수: " + repository.getAllManagers().size());
-        
+//        // 저장된 관리자 수 확인
+//        System.out.println("- 저장된 관리자 수: " + repository.getAllManagers().size());
+//        
         System.out.println("✅ 인증 시스템 테스트 완료\n");
     }
    
@@ -94,7 +99,9 @@ public class ManagerLoginTest {
 	// 로그인, 로그아웃 테스트
 	private static void testLoginLogout() {
 		// TODO Auto-generated method stub
+		System.out.println("==========================================");
         System.out.println("3. 로그인, 로그아웃 테스트");
+		System.out.println("==========================================");
         
         ManagerLoginController controller = new ManagerLoginController();
         

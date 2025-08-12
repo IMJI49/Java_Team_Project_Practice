@@ -6,14 +6,39 @@ import com.shoppingmall.models.Customer;
 import com.shoppingmall.persistence.FileManagement;
 import com.shoppingmall.util.Constants;
 
-
 public class UserRepository {
 
 
 	// 파일명 상수
 	private static final String FILE_NAME = Constants.USER_DATA_FILE;
 	
+	public UserRepository() {
+		
+    	initialize();
+    	
+	}
 	
+    // 기본 고객 계정 생성(초기화)
+	private void initialize() {
+		List<Customer> customers = FileManagement.readFromFile(FILE_NAME);
+		
+		//기본 관리자가 없으면 생성
+		if(customers.isEmpty()) {
+			
+			Customer defaultCustomer = new Customer(
+					"고객1", 
+					"서울시 중구 중동", 
+					"customer1@gmail.com", 
+					"customer1", 
+					"customer1234", 
+					"010-5678-1234"
+					);
+			customers.add(defaultCustomer);
+			FileManagement.writeToFile(FILE_NAME, customers);
+			System.out.println("기본 고객 계정이 생성되었습니다.");
+		}
+	}
+
 	// 사용자 저장
 	public Customer save(Customer customer) {
 		// 기존 사용자 목록 조회
@@ -36,7 +61,7 @@ public class UserRepository {
 	}
 
 	
-	//ID로 사용자 조회
+	// 사용자 조회 (ID로 검색)
 	public Object findById(String id) {
 		List<Customer> users = FileManagement.readFromFile(FILE_NAME);
 		return users.stream()
@@ -46,8 +71,16 @@ public class UserRepository {
 	}
 
 	// 모든 사용자 데이터 반환 (비밀번호 제외)
-	public List<Customer> getAllCustomersWithoutPassword() {
-	    return FileManagement.readFromFile(FILE_NAME);
+	public List<Customer> getAllCustomers() {
+	    List<Customer> customers = FileManagement.readFromFile(FILE_NAME);
+		
+	    //비밀번호만 * 16자로 바꾸기
+	    for(Customer customer : customers) {
+	    	customer.setPassword("*".repeat(16));
+	    	
+	    }
+	    
+		return customers;
 	}
 	
 }
