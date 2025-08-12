@@ -19,7 +19,7 @@ public class UserRepository {
 	}
 	
     // 기본 고객 계정 생성(초기화)
-	private void initialize() {
+	public void initialize() {
 		List<Customer> customers = FileManagement.readFromFile(FILE_NAME);
 		
 		//기본 관리자가 없으면 생성
@@ -81,6 +81,22 @@ public class UserRepository {
 	    }
 	    
 		return customers;
+	}
+
+	
+	
+	// 사용자 인증
+	public static Customer authenticate(String id, String password) {
+		
+		List<Customer> customers = FileManagement.readFromFile(FILE_NAME);
+		
+		Customer foundCustomer = customers.stream()
+									.filter(customer -> customer.getId().equals(id) &&
+											customer.getPassword().equals(password))
+									.findFirst()
+									.orElse(null);
+		
+		return foundCustomer;
 	}
 	
 }

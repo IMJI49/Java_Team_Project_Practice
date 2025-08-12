@@ -11,6 +11,7 @@ public class ProductRepository {
 	// 파일명 상수
 	private static final String FILE_NAME = Constants.PRODUCT_DATA_FILE;
 
+	
 	public ProductRepository() {
 		
 		initialize();
@@ -29,14 +30,17 @@ public class ProductRepository {
 			Item item3 = new Item("커피","식품",8000,500,"커피입니다");
 			Item item4 = new Item("소설","도서",12000,80,"소설입니다");
 			Item item5 = new Item("문구류","기타",3000,700,"문구류입니다");
-		};
+		
 			items.add(item1);
 			items.add(item2);
 			items.add(item3);
 			items.add(item4);
 			items.add(item5);
-		FileManagement.writeToFile(FILE_NAME, items);
-		System.out.println("기본 상품이 생성되었습니다.");
+			
+			FileManagement.writeToFile(FILE_NAME, items);
+			System.out.println("기본 상품이 생성되었습니다.");
+		
+		};
 	}
 	
 	
@@ -59,10 +63,17 @@ public class ProductRepository {
 		public Object findByCategory(String category) {
 		List<Item> items = FileManagement.readFromFile(FILE_NAME);
 		
-		return items.stream()
-				.filter(u -> u.getCategory().equals(category)
-				.findFirst()
-				.orElse(null);
+		List<Item> foundItems = items.stream()
+				.filter(u -> u.getCategory().equals(category))
+				.toList();
+
+		if(foundItems.isEmpty()) {
+			return null;
+		}
+		
+		foundItems.forEach(System.out::println);
+		
+		return foundItems;
 	}
 		
 		
@@ -70,10 +81,18 @@ public class ProductRepository {
 		public Object findBy(String name) {
 		List<Item> items = FileManagement.readFromFile(FILE_NAME);
 		
-		return items.stream()
-				.filter(u -> u.getName().equals(name)
-				.findFirst()
-				.orElse(null);
+		List<Item> foundItems = items.stream()
+								.filter(u -> u.getName().equals(name))
+								.toList();
+		
+		if(foundItems.isEmpty()) {
+			return null;
+		}
+		
+		foundItems.forEach(System.out::println);
+		
+		return foundItems;
+				
 	}
 
 }
