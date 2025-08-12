@@ -1,4 +1,4 @@
-package models;
+package com.shoppingmall.models;
 
 import java.io.Serializable;
 
@@ -8,66 +8,84 @@ public abstract class Person implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	protected String name;
-	protected String adress;
+	protected String address;
 	protected String email;
 	protected String id;
 	protected String password;
 	protected String phoneNumber;
 	public abstract String getRole();
 	
-	public Person(String id, String name,  String password, String adress, String email, 
+	public Person(String id, String name,  String password, String address, String email, 
 			String phoneNumber) {
 		this.id = id;
 		this.name = name;
 		this.password = password;
-		this.adress = adress;
+		this.address = address;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		getRole();
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getEmail() {
 		return email;
 	}
 
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public String getId() {
 		return id;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getName() {
-		return name;
-	}
-	public String getAdress() {
-		return adress;
-	}
 	public String getPassword() {
 		return password;
-	}
-	public void setAdress(String adress) {
-		this.adress = adress;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	@Override
 	public String toString() {
-		return String.format("이름 : %s, 아이디 주소 : %s, 비밀번호 : %s", name,adress,"*".repeat(password.length()));
-			
+		return "Person [name=" + name + ", address=" + address + ", email=" + email + ", id=" + id + ", password="
+				+ password + ", phoneNumber=" + phoneNumber + "]";
 	}
+
+
 	
 }
 

@@ -1,4 +1,4 @@
-package exceptionlist;
+package com.shoppingmall.exceptionlist;
 
 @SuppressWarnings("serial")
 public class ShopException extends Exception {
