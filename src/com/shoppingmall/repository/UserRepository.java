@@ -99,4 +99,86 @@ public class UserRepository {
 		return foundCustomer;
 	}
 	
+	
+	// 비밀번호 확인 (개인정보 수정 전 인증용)
+    public boolean verifyPassword(String id, String password) {
+        Customer customer = (Customer) findById(id);
+        return customer != null && customer.getPassword().equals(password);
+    }
+    
+    // 이메일 수정
+    public boolean updateEmail(String id, String currentPassword, String newEmail) {
+        if (!verifyPassword(id, currentPassword)) {
+            return false; // 비밀번호 불일치
+        }
+
+        List<Customer> customers = FileManagement.readFromFile(FILE_NAME);
+        
+        for (Customer customer : customers) {
+            if (customer.getId().equals(id)) {
+                customer.setEmail(newEmail);
+                FileManagement.writeToFile(FILE_NAME, customers);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+//    // 전화번호 수정
+//    public boolean updatePhone(String id, String currentPassword, String newPhone) {
+//        if (!verifyPassword(id, currentPassword)) {
+//            return false; // 비밀번호 불일치
+//        }
+//
+//        List<Customer> customers = FileManagement.readFromFile(FILE_NAME);
+//        
+//        for (Customer customer : customers) {
+//            if (customer.getId().equals(id)) {
+//                customer.setPhone(newPhone);
+//                FileManagement.writeToFile(FILE_NAME, customers);
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+    
+    // 주소 수정
+    public boolean updateAddress(String id, String currentPassword, String newAddress) {
+        if (!verifyPassword(id, currentPassword)) {
+            return false; // 비밀번호 불일치
+        }
+
+        List<Customer> customers = FileManagement.readFromFile(FILE_NAME);
+        
+        for (Customer customer : customers) {
+            if (customer.getId().equals(id)) {
+                customer.setAddress(newAddress);
+                FileManagement.writeToFile(FILE_NAME, customers);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
+    // 비밀번호 변경
+    public boolean changePassword(String id, String currentPassword, String newPassword) {
+        if (!verifyPassword(id, currentPassword)) {
+            return false; // 현재 비밀번호 불일치
+        }
+
+        List<Customer> customers = FileManagement.readFromFile(FILE_NAME);
+        
+        for (Customer customer : customers) {
+            if (customer.getId().equals(id)) {
+                customer.setPassword(newPassword);
+                FileManagement.writeToFile(FILE_NAME, customers);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
+	
 }
