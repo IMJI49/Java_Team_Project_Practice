@@ -9,6 +9,47 @@ public class CartItem {
 	 * getter 생성
 	 * 
 	 */
+	private Item item;
+	private int quantity;
+	
+	public CartItem(Item item, int quantity) {
+		//super();
+		this.item = item;
+		this.quantity = quantity;
+	}
+	
+	public void addQuantity(int amount) {
+		quantity += amount;
+	}
+	
+	public void reduceQuantity(int amount) {
+		quantity -= amount;
+	}
+	
+	public int getTotalPrice() {
+		return item.getPrice() * this.quantity;
+	}
+
+	public Item getItem() {
+		return item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	@Override
+	public String toString() {
+		return "CartItem [item=" + item + ", quantity=" + quantity + "]";
+	}
 }
 
 	
