@@ -52,8 +52,10 @@ public class Item implements Serializable {
 
 	@Override
 	public String toString() {
-		return super.toString();
-
+		return "Item [itemID=" + itemID + ", name=" + name + ", category=" + category + ", price=" + price
+				+ ", quantity=" + quantity + ", prodDesc=" + prodDesc + "]";
 	}
+	
+	
 
 }
