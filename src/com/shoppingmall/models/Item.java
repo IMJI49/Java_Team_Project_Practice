@@ -1,6 +1,7 @@
 package com.shoppingmall.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Item implements Serializable {
 
@@ -15,25 +16,51 @@ public class Item implements Serializable {
 	private int quantity;
 	private String description;
 	private static int idNum = 1;
-
+	private double rating;
+	private ArrayList<String> reviewing;
+	private int reviewCount = 0;
 //	"P"+String.format("%4d", idNum);
+
+	public int getReviewCount() {
+		return reviewCount;
+	}
 
 	public String getItemID() {
 		return itemID;
 	}
 
-	public Item(String description) {
-		this.description = description;
-	}
-
 	public Item(String name, String category, int price, int quantity, String description) {
-		itemID = "P" + String.format("%40d", idNum);
+		itemID = "P" + String.format("%04d", idNum);
 		this.name = name;
 		this.category = category;
 		this.price = price;
 		this.quantity = quantity;
 		this.description = description;
 		idNum++;
+		rating = 0.0;
+		reviewing = new ArrayList<String>();
+	}
+	
+	public void addReview(double newRating) {
+		double nowRating = getRating()*getReviewCount();
+		reviewCount++;
+		rating = (nowRating+newRating)/(double)reviewCount;
+	}
+
+	public double getRating() {
+		return rating;
+	}
+
+	public void setRating(double rate) {
+		this.rating = rate;
+	}
+
+	public ArrayList<String> getReviewing() {
+		return reviewing;
+	}
+
+	public void setReviewing(ArrayList<String> reviewing) {
+		this.reviewing = reviewing;
 	}
 
 	public String getName() {
