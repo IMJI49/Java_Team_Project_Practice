@@ -77,12 +77,50 @@ public class ProductRepository {
 	}
 		
 		
-	// 이름으로 상품 검색
+	// 상품명으로 상품 검색
 		public Object findBy(String name) {
 		List<Item> items = FileManagement.readFromFile(FILE_NAME);
 		
 		List<Item> foundItems = items.stream()
 								.filter(u -> u.getName().equals(name))
+								.toList();
+		
+		if(foundItems.isEmpty()) {
+			return null;
+		}
+		
+		foundItems.forEach(System.out::println);
+		
+		return foundItems;
+				
+	}
+		
+		
+	// 설명으로 상품 검색
+		public Object findByDesc(String desc) {
+		List<Item> items = FileManagement.readFromFile(FILE_NAME);
+		
+		List<Item> foundItems = items.stream()
+								.filter(u -> u.getProdDesc().equals(desc))
+								.toList();
+		
+		if(foundItems.isEmpty()) {
+			return null;
+		}
+		
+		foundItems.forEach(System.out::println);
+		
+		return foundItems;
+				
+	}
+		
+		// 가격대로 상품 검색
+		public Object findByPriceRange(int minPrice, int maxPrice) {
+		List<Item> items = FileManagement.readFromFile(FILE_NAME);
+		
+		List<Item> foundItems = items.stream()
+								.filter(i -> i.getPrice() >= minPrice &&
+											i.getPrice() <=maxPrice)
 								.toList();
 		
 		if(foundItems.isEmpty()) {
