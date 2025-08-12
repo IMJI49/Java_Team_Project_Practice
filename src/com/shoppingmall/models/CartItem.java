@@ -34,18 +34,10 @@ public class CartItem {
 		return item;
 	}
 
-	public void setItem(Item item) {
-		this.item = item;
-	}
-
 	public int getQuantity() {
 		return quantity;
 	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
+	// 예쁘게 보이도록 수정ㄴ
 	@Override
 	public String toString() {
 		return "CartItem [item=" + item + ", quantity=" + quantity + "]";

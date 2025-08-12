@@ -8,12 +8,11 @@ import com.shoppingmall.exception.ShoppingMallException;
 import com.shoppingmall.exception.ValidationException;
 import com.shoppingmall.models.Customer;
 import com.shoppingmall.models.Item;
+import com.shoppingmall.models.Order.Status;
 
 public class ValidationUtils {
 	/*
-	 * exception 여기 throw
-	 * 빈 문자"", null값 확인
-	 * 길이 min, max 확인
+	 * exception 여기 throw 빈 문자"", null값 확인 길이 min, max 확인
 	 * 
 	 */
 	public static void requireNotNullAndEmpty(String str, String message) throws ValidationException {
@@ -21,33 +20,41 @@ public class ValidationUtils {
 			throw new ValidationException(message);
 		}
 	}
-	public static void requireMinLength(String str, int minLeng, String message) throws ValidationException{
-		requireNotNullAndEmpty(str,message);
+
+	public static void requireMinLength(String str, int minLeng, String message) throws ValidationException {
+		requireNotNullAndEmpty(str, message);
 		if (str.length() < minLeng) {
 			throw new ValidationException(message);
 		}
 	}
-	public static void requireMaxLength(String str, int maxLeng, String message) throws ValidationException{
-		requireNotNullAndEmpty(str,message);
+
+	public static void requireMaxLength(String str, int maxLeng, String message) throws ValidationException {
+		requireNotNullAndEmpty(str, message);
 		if (str.length() > maxLeng) {
 			throw new ValidationException(message);
 		}
 	}
-
+	public static void orderPendingCheck(Status status, String message) throws ValidationException{
+		if (status != Status.PENDING) throw new ValidationException(message);
+	}
+	public static void orderShippingCheck(Status status, String message) throws ValidationException{
+		if (status != Status.SHIPPING) throw new ValidationException(message);
+	}public static void orderDeliveryCheck(Status status, String message) throws ValidationException{
+		if (status != Status.DELIVERED) throw new ValidationException(message);
+	}
 	@SuppressWarnings("unused")
-	public static void requireNotNullObject(Object obj, String message) throws ShoppingMallException{
-		if (obj.getClass() == Item.class &&obj== null) {
+	public static void requireNotNullObject(Object obj, String message) throws ShoppingMallException {
+		if (obj.getClass() == Item.class && obj == null) {
 			throw new ProductNotFoundException(message);
-		}
-		else if (obj.getClass() == Customer.class &&obj== null) {
+		} else if (obj.getClass() == Customer.class && obj == null) {
 			throw new CustomerNotFoundException(message);
 		}
 	}
-	public static void requireSufficientStock(Item item, int quantity, String message) throws InsufficientResourcesException {
-		if ((item.getQuantity()-quantity) < 0) {
+
+	public static void requireSufficientStock(Item item, int quantity, String message)
+			throws InsufficientResourcesException {
+		if ((item.getQuantity() - quantity) < 0) {
 			throw new InsufficientResourcesException(message);
 		}
 	}
 }
-
-	

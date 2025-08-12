@@ -3,6 +3,9 @@ package com.shoppingmall.models;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.shoppingmall.exception.ValidationException;
+import com.shoppingmall.util.ValidationUtils;
+
 public class Order {
 	/*
 	 * 변수 작성 및 생성자 생성
@@ -14,50 +17,59 @@ public class Order {
 	
 	 public enum Status { PENDING, CONFIRM, SHIPPING, DELIVERED, CANCELLED }
 
-	    private static int orderSeq = 1;
+	    private static long orderSeq = 1;
 	    private String orderId;
 	    private Customer customer;
 	    private LocalDateTime orderDate;
 	    private Status status;
-	    private List<CartItem> items;
+	    private List<CartItem> cartItems;
 	    private int totalAmount;
 	    private String shippingAddress;
 
 	    // 생성자
-	    public Order(Customer customer, List<CartItem> items, String shippingAddress) {
-	        this.orderId = "O" + String.format("%04d", orderSeq++);
+	    public Order(Customer customer, List<CartItem> cartItems, String shippingAddress) {
+	        this.orderId = "O" + String.format("%08d", orderSeq++);
 	        this.customer = customer;
 	        this.orderDate = LocalDateTime.now();
 	        this.status = Status.PENDING;
-	        this.items = items;
+	        this.cartItems = cartItems;
 	        this.totalAmount = calculateTotal();
 	        this.shippingAddress = (shippingAddress == null || shippingAddress.isBlank()) ? customer.getAddress() : shippingAddress; 
 	    }
 
-	    // 총금액 계산
+	    public Order(Customer customer, List<CartItem> cartItems) {
+	    	this.orderId = "O" + String.format("%08d", orderSeq++);
+	        this.customer = customer;
+	        this.orderDate = LocalDateTime.now();
+	        this.status = Status.PENDING;
+	        this.cartItems = cartItems;
+	        this.totalAmount = calculateTotal();
+	        shippingAddress = customer.getAddress();
+		}
+
+		// 총금액 계산
 	    private int calculateTotal() {
 	        int sum = 0;
-	        for (CartItem item : items) {
-	            sum += item.getTotalPrice();
+	        for (CartItem cartItem : cartItems) {
+	            sum += cartItem.getTotalPrice();
 	        }
 	        return sum;
 	    }
-
-	    public void confirmOrder() {
-	        if (status != Status.PENDING) throw new IllegalStateException("현재 상태에서는 주문 확정이 불가능합니다.");
-
+	    // for quantity 작성 i/o에서 item 받아서 validationutil에서 가져와서 하기
+	    public void confirmOrder() throws ValidationException {
+	        ValidationUtils.orderPendingCheck(status, "현재 상태에서는 주문 확정이 불가능합니다.");
 	        // 결제로직(생략: 별도의 PaymentService에서 구현 가능)
 	        status = Status.CONFIRM;
 
 	        // 재고 차감
-	        for (CartItem cartItem : items) {
-	            Item item = cartItem.getItem();
-	            if (item.getQuantity() < cartItem.getQuantity())
-	                throw new IllegalStateException(String.format("[%s] 상품의 재고가 부족합니다.", item.getName()));
-	            item.setQuantity(item.getQuantity() - cartItem.getQuantity());
-	        }
+//	        for (CartItem cartItem : cartItems) {
+//	            Item item = cartItem.getItem();
+//	            if (item.getQuantity() < cartItem.getQuantity())
+//	                throw new IllegalStateException(String.format("[%s] 상품의 재고가 부족합니다.", item.getName()));
+//	            item.setQuantity(item.getQuantity() - cartItem.getQuantity());
+//	        }
 	    }
-
+	    // 이름 님의 배송이 시작되었습니다 + ID	
 	    public void startShipping() {
 	        if (status != Status.CONFIRM) throw new IllegalStateException("확정된 주문만 배송을 시작할 수 있습니다.");
 	        status = Status.SHIPPING;
@@ -84,29 +96,30 @@ public class Order {
 	        }
 	    }
 
-	    public void cancelOrder(boolean byManager) {
+	    public void cancelOrder(Person person) {
 	        if (status != Status.PENDING) {
 	            throw new IllegalStateException("PENDING 상태에서만 주문 취소가 가능합니다.");
 	        }
 	        status = Status.CANCELLED;
 
-	        if (byManager) {
-	            System.out.printf("⚠ 관리자에 의해 주문 %s이 취소되었습니다. 고객 [%s]에게 취소 안내 메시지를 전송합니다.%n", orderId, customer.getName());
+	        if (person.getRole() == "관리자") {
+	            System.err.printf("⚠ 관리자에 의해 주문 %s이 취소되었습니다. 고객 [%s]에게 재고 부족으로 인한 취소 안내 메시지를 전송합니다.%n", orderId, customer.getName());
 	        } else {
 	            System.out.printf("주문 %s이 취소되었습니다.%n", orderId);
 	        }
 	    }
 	    
-	    public String getOrderSummary() {
-	        return String.format("주문번호:%s, 날짜:%s, 상태:%s, 총액:%d원", orderId, orderDate, status, totalAmount);
-	    }
+	    @Override
+		public String toString() {
+			return String.format("주문번호:%s, 날짜:%s, 상태:%s, 총액:%d원", orderId, orderDate, status, totalAmount);
+		}
 
-	    public String getOrderDetail() {
+		public String getOrderDetail() {
 	        StringBuilder sb = new StringBuilder();
-	        sb.append(getOrderSummary())
+	        sb.append(toString())
 	          .append("\n배송주소: ").append(shippingAddress)
 	          .append("\n주문상품:\n");
-	        for (CartItem ci : items) {
+	        for (CartItem ci : cartItems) {
 	            sb.append("- ").append(ci.getItem().getName())
 	              .append(" x ").append(ci.getQuantity())
 	              .append(" = ").append(ci.getTotalPrice()).append("원\n");
@@ -117,25 +130,25 @@ public class Order {
 	    // Getter
 	    public String getOrderId() {
 	    	return orderId;
-	    	}
+	    }
 	    
 	    public Customer getCustomer() {
 	    	return customer;
-	    	}
+	    }
 	    
 	    public LocalDateTime getOrderDate() {
 	    	return orderDate;
-	    	}
+	    }
 	    
 	    public Status getStatus() {
 	    	return status;
-	    	}
+	    }
 	    
-	    public List<CartItem> getItems() {
-	    	return items;
-	    	}
+	    public List<CartItem> getcartItems() {
+	    	return cartItems;
+	    }
 	    
 	    public int getTotalAmount() {
 	    	return totalAmount;
-	    	}
+	    }
 	}

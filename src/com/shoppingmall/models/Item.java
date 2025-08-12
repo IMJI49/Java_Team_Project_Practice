@@ -22,12 +22,16 @@ public class Item implements Serializable {
 		return itemID;
 	}
 
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 	public Item(String description) {
 		this.description = description;
 	}
 
 	public Item(String name, String category, int price, int quantity, String description) {
-		itemID = "P" + String.format("%40d", idNum);
+		itemID = "P" + String.format("%08d", idNum);
 		this.name = name;
 		this.category = category;
 		this.price = price;
