@@ -1,5 +1,6 @@
 package com.shoppingmall.repository;
 
+<<<<<<< HEAD
 import java.util.List;
 
 import com.shoppingmall.models.Customer;
@@ -182,3 +183,10 @@ public class UserRepository {
     
 	
 }
+=======
+public class UserRepository {
+
+}
+
+	
+>>>>>>> refs/remotes/origin/main

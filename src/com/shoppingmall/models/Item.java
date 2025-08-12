@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Item implements Serializable {
 
 
+
 	private static final long serialVersionUID = 1L;
 	private String itemID;
 	private String name;
@@ -55,7 +56,4 @@ public class Item implements Serializable {
 		return "Item [itemID=" + itemID + ", name=" + name + ", category=" + category + ", price=" + price
 				+ ", quantity=" + quantity + ", prodDesc=" + prodDesc + "]";
 	}
-	
-	
-
 }

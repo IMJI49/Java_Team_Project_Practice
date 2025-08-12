@@ -3,6 +3,7 @@ package com.shoppingmall.models;
 public class Customer extends Person {
 
 
+
 	private static final long serialVersionUID = 1L;
 
 	public Customer(String name, String address, String email, String id, String password,
@@ -23,8 +24,6 @@ public class Customer extends Person {
 				+ password + ", phoneNumber=" + phoneNumber + "]";
 	}
 
-	
-	
 }
 
 	
