@@ -1,5 +1,7 @@
 package com.shoppingmall.service;
 
+import com.shoppingmall.models.Item;
+
 public class ManagerService {
 	/*
 	 * order status : confirm, cancel, shipping
@@ -24,6 +26,45 @@ public class ManagerService {
 	 * 6. 로그아웃
 	 * 추가 구현 기능 판매된 아이템 보기 (statistic)
 	 */
+	
+	// 모든 주문 보기
+	public void viewAllOrders() {}
+	// 주문 확인하기
+	public void confirmOrder(String orderId) {}
+	// 주문 취소하기
+	public void cancelOrder(String orderId) {}
+	// 배달 시작
+	public void startShippiing(String orderId) {}
+	// 배달 완료
+	public void completeDelivery(String orderId) {}
+	// 주문 내역 보기
+	public void getOrderDetail(String orderId) {}
+	// 상품 추가
+	public void addProduct(Item item) {}
+	// 상품 제거
+	public void removeProduct(String itemId) {}
+	// 상품 수정
+	public void updateProduct(Item item) {}
+	// 재고 수정
+	public void updateStock(String itemId, int quantity) {}
+	// 모든 상품 보기
+	public void viewAllProducts() {}
+	// 상품 보기
+	public void viewProductsDetail(String itemId) {}
+	// 모든 고객 보기
+	public void viewAllCustomers() {}
+	// 이름으로 고객 검색
+	public void searchCustomerByName(String name) {}
+	// 고객 보기
+	public void getCustomerDetail(String id) {}
+	// 고객 삭제
+	public void deleteCustomer(String id, String reason) {}
+	// 고객에게 메시지 보내기
+	public void sendNotificationToCustomer(String id, String message) {}
+	// 판매 통계 보기
+	public void viewSalesStatistics() {}
+	// 가장 인기있는 상품들
+	public void viewPopularItems() {}
 }
 
 	

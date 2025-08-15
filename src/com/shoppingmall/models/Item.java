@@ -1,6 +1,8 @@
 package com.shoppingmall.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Item implements Serializable {
 
@@ -15,6 +17,7 @@ public class Item implements Serializable {
 	private int quantity;
 	private String description;
 	private static int idNum = 1;
+	private ArrayList<String> review;
 
 //	"P"+String.format("%4d", idNum);
 
@@ -22,12 +25,16 @@ public class Item implements Serializable {
 		return itemID;
 	}
 
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 	public Item(String description) {
 		this.description = description;
 	}
 
 	public Item(String name, String category, int price, int quantity, String description) {
-		itemID = "P" + String.format("%40d", idNum);
+		itemID = "P" + String.format("%08d", idNum);
 		this.name = name;
 		this.category = category;
 		this.price = price;
@@ -62,8 +69,12 @@ public class Item implements Serializable {
 	}
 
 	public int discount(double offRate) {
-		this.price *= offRate;
+		this.price *= (1-offRate);
 		return this.price;
+	}
+	
+	public void reviewing(String review) {
+		this.review.add(review);
 	}
 
 	@Override

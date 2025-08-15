@@ -1,5 +1,13 @@
 package com.shoppingmall.service;
 
+import java.util.List;
+import java.util.Scanner;
+
+import com.shoppingmall.models.CartItem;
+import com.shoppingmall.models.Customer;
+import com.shoppingmall.models.Item;
+import com.shoppingmall.models.Order;
+
 public class UserService {
 	/*
 	 * 카트담기(50 종목 이상 불가능), 제품 설명보기
@@ -25,6 +33,41 @@ public class UserService {
 	 * 1. 상품 둘러보기 : searchbycategory 카테고리, newitem신상품, bestseller베스트셀러
 	 * 2. 상품검색 : searchbyname 
 	 */
+	
+	private Scanner scanner = new Scanner(System.in);
+	
+	// 장바구니에 아이템 추가
+	public void addToCart(Item item, int quantity) {}
+	// 장바구니에 아이템 제거
+	public void removeFromCart(Item item) {}
+	// 상품 주문하기
+	public void placeOrder(List<CartItem> cartItems) {}
+	// 내 장바구니 보기
+	public List<CartItem> viewCart() { return null; }
+	// 카테고리로 상품 검색
+	public void searchProductByCategory(String category) {}
+	// 이름으로 상품 검색
+	public void searchProductByName(String name) {}
+	// 사용자의 주문내역 반환
+	public List<Order> getUserOrders(){ return null; }
+	// 개인정보 수정
+	public void updatePersonalInfo(Customer updatePerson) {}
+	// 비밀번호 변경
+	public void changePassword(String password) {}
+	// 계정 삭제
+	public void deleteAccount(String id) {}
+	// 베스트셀러 보기
+	public List<Item> viewBestSellers() { return null; }
+	// 신상품 보기
+	public List<Item> viewNewItems() { return null; }
+	// 상품 아이디로 검색해서 상품 반환하기
+	public Item getItemByID(String itemId) { return null; }
+	// 리뷰하기
+	public void reviewing(String itemId) {
+		System.out.println("리뷰할 내용을 적어주세요 : _");
+		String review = scanner.nextLine();
+		this.getItemByID(itemId).reviewing(review);
+	}
 }
 
 	
