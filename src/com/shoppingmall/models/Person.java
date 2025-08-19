@@ -48,8 +48,8 @@ public abstract class Person implements Serializable {
 	public String getPassword() {
 		return password;
 	}
-	public void setAdress(String adress) {
-		this.address = adress;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public void setEmail(String email) {
@@ -66,7 +66,7 @@ public abstract class Person implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("이름 : %s, 아이디 주소 : %s, 비밀번호 : %s", name,address,"*".repeat(password.length()));
+		return String.format("이름 : %s, 아이디 주소 : %s, 비밀번호 : %s", name,address,password);
 			
 	}
 	

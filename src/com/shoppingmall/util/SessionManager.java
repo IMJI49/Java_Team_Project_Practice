@@ -22,7 +22,7 @@ public class SessionManager {
 	public static void setCurrentUser(Customer currentUser) {
 		SessionManager.currentUser = currentUser;
 	}
-	public static void setCurrentManager(Manager currentUser) {
+	public static void setCurrentManager(Person currentUser) {
 		SessionManager.currentUser = currentUser;
 	}
 	public static boolean isLogIn() {
