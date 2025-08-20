@@ -4,22 +4,22 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import com.shoppingmall.exception.CustomerNotFoundException;
 import com.shoppingmall.exception.ProductNotFoundException;
+import com.shoppingmall.exception.ShoppingMallException;
 import com.shoppingmall.exception.ValidationException;
 import com.shoppingmall.models.CartItem;
 import com.shoppingmall.models.Customer;
 import com.shoppingmall.models.Item;
-import com.shoppingmall.models.Manager;
 import com.shoppingmall.models.Order;
 import com.shoppingmall.models.Order.Status;
 import com.shoppingmall.persistence.FileManagement;
 import com.shoppingmall.repository.ProductRepository;
 import com.shoppingmall.repository.UserRepository;
 import com.shoppingmall.util.ValidationUtils;
+
 
 public class UserService {
 	/*
@@ -41,18 +41,15 @@ public class UserService {
 	 * "바꾸실 수 있는 정보" - typying으로 받는 걸로 String으로 주소, 이메일, 전화 번호
 	 * 
 	 */
-	private Scanner scanner;
-	private HashMap<String, Item> items;
-	private HashMap<String, Customer> customers;
-	private HashMap<String, Manager> managers;
-	private HashMap<String, Order> orders;
-	private HashMap<String, ArrayList<CartItem>> carts;
-	private HashMap<ArrayList<String>, String> review; // ItemID, String Review
-	private LocalDateTime shippingDate; // 배송 완료 날짜
-	private String mallName;
-
+	protected HashMap<String, Item> items; // string : itemid 
+	protected HashMap<String, Customer> customers; // string : userid
+	protected HashMap<String, Order> orders; // orderid 
+	protected HashMap<String, ArrayList<CartItem>> carts; // string : userid
+	protected HashMap<ArrayList<String>, String> review; // ItemID, String Review
+	protected LocalDateTime shippingDate; // 배송 완료 날짜
+	protected String mallName;
+	
 	public UserService(String mallName) {
-		scanner = new Scanner(System.in);
 		this.mallName = mallName;
 		items = new HashMap<String, Item>();
 		List<Item> itemList = FileManagement.readFromFile(ProductRepository.FILE_NAME);
@@ -64,7 +61,6 @@ public class UserService {
 		for (Customer customer : customerList) {
 			customers.put(customer.getId(), customer);
 		}
-		managers = new HashMap<String, Manager>();
 		orders = new HashMap<String, Order>();
 		List<Order> orderList = FileManagement.readFromFile(UserRepository.FILE_NAME);
 		for (Order order : orderList) {
@@ -73,26 +69,42 @@ public class UserService {
 		carts = new HashMap<String, ArrayList<CartItem>>();
 		review = new HashMap<ArrayList<String>, String>();
 	}
-
-	public void placeOrder(String customerID) throws CustomerNotFoundException {
-		Customer customer = customers.get(customerID);
-		ArrayList<CartItem> items = carts.get(customerID);
-		ValidationUtils.requireNotNullCustomer(customer, customerID);
-		int sum = 0;
-
+	public void addCart(Customer customer,String itemName, int quantity) throws ShoppingMallException {
+		Item item = null;
+		for (Item it : items.values()) {
+			if (it.getName() == itemName) {
+				item = it;
+			}
+		}
+		ValidationUtils.requireNotNullItem(item, "제품이 없습니다.");
+		CartItem cartItem = new CartItem(item, quantity);
+		carts.get(customer.getId()).add(cartItem);
 	}
 
-	public void confirmOrder(Status status, String orderID) throws ValidationException {
-		ValidationUtils.orderPendingCheck(status, "현재 상태에서는 주문 확정이 불가능합니다.");
-		status = Status.CONFIRM;
-		orders.get(orderID).setStatus(status);
-	}
+	public void placeOrder(Customer customer, String shipAddress) throws CustomerNotFoundException, ValidationException {
+		ValidationUtils.requireNotNullCustomer(customer, customer.getId());
+		ArrayList<CartItem> cartItems = carts.get(customer.getId());
+		if (cartItems == null || cartItems.isEmpty()) {
+	        throw new ValidationException("장바구니가 비어 있습니다.");
+	    }
+		Order order = new Order(customer, cartItems, shipAddress);
+		orders.put(order.getOrderID(), order);
 
-	public void startShipping(Status status, String orderID) throws ValidationException {
-		if (status != Status.CONFIRM)
-			throw new ValidationException("확정된 주문만 배송을 시작할 수 있습니다.");
-		status = Status.SHIPPING;
-		System.out.printf("📦 %s님 주문의 배송이 시작되었습니다. (주문번호 : %s)\n", customers.get(orderID).getName(), orderID);
+	    System.out.printf("주문 완료! 주문번호: %s, 총액: %,d원\n", order.getOrderID(), order.getTotalAmount());
+	}
+	
+	public void placeOrder(Customer customer) throws CustomerNotFoundException, ValidationException {
+	    ValidationUtils.requireNotNullCustomer(customer, customer.getId());
+	    ArrayList<CartItem> cartItems = carts.get(customer.getId());
+
+	    // 장바구니 비었는지 체크 (리스트 전용 메서드는 없으니 직접 체크)
+	    if (cartItems == null || cartItems.isEmpty()) {
+	        throw new ValidationException("장바구니가 비어 있습니다.");
+	    }
+	    Order order = new Order(customer, cartItems);
+	    orders.put(order.getOrderID(), order);
+
+	    System.out.printf("주문 완료! 주문번호: %s, 총액: %,d원\n", order.getOrderID(), order.getTotalAmount());
 	}
 
 	public void completeDelivery(Status status, String orderID) throws ValidationException {
@@ -110,14 +122,29 @@ public class UserService {
 		System.err.printf("⚠ 주문 [%s]가 취소되었습니다./n", orderID);
 	}
 
-	// 3일 지난 배송 자동 완료
-	public void autoCompleteDeliveryIfOver3Days(Status status, String orderID) {
-		if (status == Status.SHIPPING && shippingDate != null
-				&& shippingDate.plusDays(3).isBefore(LocalDateTime.now())) {
-			status = Status.DELIVERED;
-			System.out.printf("📦 주문 [%s]은 발송 3일 경과로 자동 완료 처리되었습니다.\n", orderID);
-		}
-	}
+    
+    // 리뷰 작성 메서드 구현
+    public void addReview(String itemId, double rating, String reviewText) {
+        List<Item> items = FileManagement.readFromFile(ProductRepository.FILE_NAME);
+
+        for (Item item : items) {
+            if (item.getItemID().equals(itemId)) {
+                // 평점 추가
+                item.addRating(rating);
+                // 리뷰 내용 추가
+                item.addReviewing(reviewText);
+
+                // 파일에 저장
+                FileManagement.writeToFile(ProductRepository.FILE_NAME, items);
+                System.out.println("리뷰가 추가되었습니다.");
+                return;
+            }
+        }
+
+        System.out.println("해당 ID의 상품을 찾을 수 없습니다.");
+    }
+
+    
 
 	// 리뷰 안내 (배송 완료 후 1회만)
 	public void promptReview(Status status, String orderID) {
@@ -145,14 +172,11 @@ public class UserService {
 	}
 	// 카테고리로 상품 검색
 	public List<Item> findByCategory(String category) {
-		List<Item> items = FileManagement.readFromFile(ProductRepository.FILE_NAME);
-
-		List<Item> foundItems = items.stream().filter(u -> u.getCategory().equals(category)).toList();
-
+		List<Item> foundItems = items.values().stream().filter(u -> u.getCategory().toLowerCase().contains(category.toLowerCase())).toList();
 		if (foundItems.isEmpty()) {
+			System.out.println("상품이 없습니다.");
 			return null;
 		}
-
 		foundItems.forEach(System.out::println);
 
 		return foundItems;
@@ -160,28 +184,29 @@ public class UserService {
 
 	// 상품명으로 상품 검색
 	public List<Item> findByName(String name) {
-		List<Item> items = FileManagement.readFromFile(ProductRepository.FILE_NAME);
-
-		List<Item> foundItems = items.stream().filter(u -> u.getName().equals(name)).toList();
-
+		List<Item> foundItems = items.values().stream().filter(u -> u.getName().toLowerCase().contains(name.toLowerCase())).toList();
 		if (foundItems.isEmpty()) {
+			System.out.println("상품이 없습니다.");
 			return null;
 		}
-
 		foundItems.forEach(System.out::println);
-
 		return foundItems;
-
 	}
-
+	public List<Item> findProduct(String string) throws ValidationException{
+		ValidationUtils.requireNotNullAndEmpty(string, "검색어를 입력해주세요.");
+		List<Item> foundItems= items.values().stream()
+				 .filter(item -> item.getName().toLowerCase().contains(string.toLowerCase())
+						 	||  item.getDescription().toLowerCase().contains(string.toLowerCase()))
+			     .collect(Collectors.toList());	// 리스트로 수집
+		
+		foundItems.forEach(System.out::println);
+		return foundItems;
+	}
 	// (1. 1만원 미만, 2. 1-5만원, 3. 5-10만원, 4. 10만원 이상)
 	// 가격대로 상품 검색
 	public void findByPriceRange(int option) throws ValidationException {
-		List<Item> items = FileManagement.readFromFile(ProductRepository.FILE_NAME);
-
-		int minPrice = 0;
-		int maxPrice =  Integer.MAX_VALUE;
-		
+		int minPrice;
+		int maxPrice;
 		switch (option) {
 			case 1: {
 				minPrice = 0;
@@ -207,38 +232,14 @@ public class UserService {
 				 throw new ValidationException("잘못된 옵션입니다: " + option);
 			}
 		
-		for (Item item : items) {
+		for (Item item : items.values()) {
 			if(item.getPrice() >= minPrice && item.getPrice() <= maxPrice) {
 				System.out.println(item);
 			}
 		}
 	}
 
-	// Item 리뷰 추가
-	public void addReview(String itemId, String customerId, int rating, String reviewText)
-			throws ProductNotFoundException {
-		ArrayList<String> ids = new ArrayList<String>();
-		ids.add(itemId);
-		ids.add(customerId);
-		Item item = items.get(itemId);
-		ValidationUtils.requireNotNullItem(item, "해당 ID의 상품을 찾을 수 없습니다: ");
-		if (item.getReview() == null) {
-			System.out.println("리뷰가 없습니다");
-		}
-
-		item.getReview().add(reviewText);
-		item.addRating(rating);
-		items.put(itemId, item);
-		List<Item> newItems = new ArrayList<Item>();
-		for (Entry<String, Item> entry : items.entrySet()) {
-			Item val = entry.getValue();
-			newItems.add(val);
-		}
-		// Item 리스트 다시 저장
-		FileManagement.writeToFile(ProductRepository.FILE_NAME, newItems);
-
-		System.out.println("리뷰가 성공적으로 추가되었습니다");
-	}
+	
 
 	// 한 상품 상세보기 : 제품 이름, 가격, 설명, 판매 횟수, 리뷰평점, 리뷰들
 	public void showItemDetails(String itemname) {
@@ -246,7 +247,7 @@ public class UserService {
 			Item item = getItembyName(itemname);
 			ValidationUtils.requireNotNullItem(item, "해당 이름의 상품을 찾을 수 없습니다");
 			System.out.println(item.toString() + String.format("상품 설명 : %s, 판매 횟수 : %d, 리뷰평점 : %.1f", item.getDescription(),item.getSellCount(),item.averageReviewRating()));
-
+			
 			// 추가적으로 리뷰점수 + 리뷰들
 				System.out.println("=== " + item.getName() + "의 전체 리뷰 요약 ===");
 				System.out.println("평균 평점: " + String.format("%.1f", item.averageReviewRating()));
@@ -280,15 +281,15 @@ public class UserService {
 
 
 	
-	// 모든 사용자 데이터 반환 (비밀번호 제외)
+	// 모든 사용자 데이터 반환    -- toString에 비밀번호가 포함되어있지 않으므로, 비밀번호 *로 바꾸는 코드는 주석처리함
 	public List<Customer> getAllCustomers() {
 		List<Customer> customers = FileManagement.readFromFile(UserRepository.FILE_NAME);
 
-		// 비밀번호만 * 16자로 바꾸기
-		for (Customer customer : customers) {
-			customer.setPassword("*".repeat(16));
-
-		}
+//		// 비밀번호만 * 16자로 바꾸기
+//		for (Customer customer : customers) {
+//			customer.setPassword("*".repeat(16));
+//
+//		} 
 
 		return customers;
 	}
@@ -354,51 +355,73 @@ public class UserService {
 		}
 		return false;
 	}
+	// Item 리뷰 추가
+		public void addReview(Customer customer, int rating, String reviewText, int itemNum)
+				throws ProductNotFoundException {
+			Item item = null;
+			for (Order order : orders.values()) {		
+				if (!order.isReviewPromptShown() && order.getStatus() == Status.DELIVERED) {
+					if(order.getCustomer() == customer) {
+						item = order.getCartItems().get(itemNum-1).getItem();
+					}
+				}
+			}
+			item.addReviewing(reviewText);
+			item.addRating(rating);
+			items.put(item.getItemID(), item);
+			List<Item> newItems = items.values().stream().toList();
+			FileManagement.writeToFile(ProductRepository.FILE_NAME, newItems);
+			System.out.println("리뷰가 성공적으로 추가되었습니다");
+		}
 
-	// 리뷰 작성 기능
-	public void writeReview(String customerId, String itemId, int rating, String reviewText) {
-
-		ProductRepository productRepository = new ProductRepository();
-		productRepository.addReview(itemId, customerId, rating, reviewText);
-
-		System.out.println("리뷰가 성공적으로 작성되었습니다");
-	}
-
-	public String getName() {
+	public String getMallName() {
 		return mallName;
-
 	}
 
-	public Scanner getScanner() {
-		return scanner;
+	public void couponUse(Customer customer, String type) {
+		customer.couponUse(type);
+		ArrayList<CartItem> cartItems = carts.get(customer.getId());
+		switch (type) {
+		case "A":
+			for (CartItem cartItem : cartItems) {
+				cartItem.discountPrice(0.1);
+			}
+			break;
+		case "B":
+			for (CartItem cartItem : cartItems) {
+				cartItem.discountPrice(0.05);
+			}
+			break;
+		case "C":
+			for (CartItem cartItem : cartItems) {
+				cartItem.discountPrice(0.01);
+			}
+			break;
+		default:
+			System.out.println("쿠폰이 없습니다.");
+			break;
+		}
 	}
-
+	
 	public HashMap<String, Item> getItems() {
 		return items;
 	}
-
 	public HashMap<String, Customer> getCustomers() {
 		return customers;
 	}
-
-	public HashMap<String, Manager> getManagers() {
-		return managers;
-	}
-
 	public HashMap<String, Order> getOrders() {
 		return orders;
 	}
-
 	public HashMap<String, ArrayList<CartItem>> getCarts() {
 		return carts;
 	}
-
-	public HashMap<ArrayList<String>, String> getReview() {
-		return review;
-	}
-
 	public LocalDateTime getShippingDate() {
 		return shippingDate;
+	}
+	// placeOrder에 들어가야함
+	public void addPoint(Customer customer) {
+		Order order = orders.get(customer.getId());
+		customer.addPoint(order);
 	}
 
 
